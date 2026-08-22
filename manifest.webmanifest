@@ -1,0 +1,16 @@
+{
+  "name": "AXIS AutoTech Jobs",
+  "short_name": "AXIS Jobs",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#02050b",
+  "theme_color": "#020712",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
