@@ -3,7 +3,7 @@ window.AXIS_CONFIG = {
 
   // Paste ONLY the safe Supabase Publishable key below.
   // It begins with: sb_publishable_
-  SUPABASE_PUBLISHABLE_KEY: "PASTE_PUBLISHABLE_KEY_HERE",
+  SUPABASE_PUBLISHABLE_KEY: "sb_publishable_zSeKBV6K0e38yf71",
 
   JOB_EMAIL_TO: "info@axisautotech.co.uk"
 };
