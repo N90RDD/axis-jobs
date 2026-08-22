@@ -1,0 +1,17 @@
+{
+  "name": "AXIS Jobs",
+  "short_name": "AXIS Jobs",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#02050b",
+  "theme_color": "#020712",
+  "icons": [
+    {
+      "src": "axis-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

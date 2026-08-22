@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#020712">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="axis-logo.png">
+<link rel="apple-touch-icon" href="axis-logo.png">
+<title>AXIS Jobs</title>
+<link rel="stylesheet" href="styles.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<div id="loginScreen" class="login-screen hidden">
+  <div class="login-card">
+    <img src="axis-logo.png" class="login-logo" alt="Axis AutoTech">
+    <h1>AXIS Jobs</h1>
+    <p>Engineer Login</p>
+
+    <form id="loginForm">
+      <label>Email</label>
+      <input id="loginEmail" type="email" autocomplete="email" required>
+
+      <label>Password</label>
+      <input id="loginPassword" type="password" autocomplete="current-password" required>
+
+      <div id="loginMessage"></div>
+
+      <button type="submit" class="full">Sign in</button>
+    </form>
+  </div>
+</div>
+
+<div id="mainApp" class="hidden">
+<header>
+  <img class="logo-img" src="axis-logo.png" alt="Axis AutoTech">
+  <div class="brand-text">
+    <h1>AXIS Jobs</h1>
+    <div class="sub">AutoTech Job Management</div>
+  </div>
+  <button id="accountBtn" class="account-btn" type="button">☰</button>
+</header>
+
+<main id="dashboard">
+<section class="hero">
+  <div class="muted axis-label">AXIS AUTOTECH</div>
+  <h2>Jobs. <b>Sorted.</b></h2>
+  <div class="muted">Create, manage and sign off vehicle jobs from your phone.</div>
+  <div class="engineer-line" id="engineerLine"></div>
+</section>
+
+<div class="grid">
+ <div class="card"><div class="muted">Open jobs</div><div class="stat" id="openCount">0</div></div>
+ <div class="card"><div class="muted">Completed</div><div class="stat" id="doneCount">0</div></div>
+</div>
+
+<div class="actions">
+  <button id="newJobBtn">＋ New Job</button>
+  <button class="secondary" id="refreshBtn">Refresh Jobs</button>
+</div>
+
+<input id="search" placeholder="Search reg, customer or job number…">
+
+<h3>Jobs</h3>
+<div id="jobs"></div>
+</main>
+</div>
+
+<dialog id="jobDialog">
+<form id="jobForm">
+<input type="hidden" id="jobId">
+
+<div class="form-head">
+  <div>
+    <div class="form-kicker">AXIS AUTOTECH</div>
+    <h2 id="formTitle">New Job</h2>
+  </div>
+  <button type="button" class="secondary small" id="closeJobBtn">✕</button>
+</div>
+
+<div class="section-divider">JOB DETAILS</div>
+<div class="row">
+  <div><label>Job number</label><input id="jobNo" required readonly></div>
+  <div><label>Date</label><input id="date" type="date" required></div>
+</div>
+
+<label>Customer / company</label>
+<input id="customer" required>
+
+<div class="row">
+  <div><label>Phone</label><input id="phone" type="tel"></div>
+  <div><label>Email</label><input id="email" type="email"></div>
+</div>
+
+<label>Address</label>
+<textarea id="address"></textarea>
+
+<div class="section-divider">VEHICLE</div>
+<div class="row">
+  <div><label>Vehicle registration</label><input id="reg" required autocapitalize="characters"></div>
+  <div><label>Mileage</label><input id="mileage" inputmode="numeric"></div>
+</div>
+
+<div class="row">
+  <div><label>Make</label><input id="make"></div>
+  <div><label>Model</label><input id="model"></div>
+</div>
+
+<label>Year</label>
+<input id="year" inputmode="numeric">
+
+<div class="section-divider">WORK</div>
+<label>Work required / reported fault</label>
+<textarea id="workRequired"></textarea>
+
+<label>Work carried out</label>
+<textarea id="workCarriedOut"></textarea>
+
+<label>Parts / materials used</label>
+<textarea id="parts"></textarea>
+
+<label>Engineer notes</label>
+<textarea id="notes"></textarea>
+
+<div class="section-divider">PHOTOS</div>
+<label>Job photos</label>
+<input id="photos" type="file" accept="image/*" multiple capture="environment">
+<div class="photo-help">Take or choose photos. They are uploaded to this job when you save it.</div>
+<div id="photoPreview" class="photo-grid"></div>
+
+<div class="section-divider">SIGN OFF</div>
+<label>Status</label>
+<select id="status">
+  <option>Booked</option>
+  <option>In Progress</option>
+  <option>Completed</option>
+</select>
+
+<label>Customer name / signatory</label>
+<input id="signatory">
+
+<label>Customer signature</label>
+<canvas id="sig" width="700" height="220"></canvas>
+
+<div class="actions">
+  <button type="button" class="secondary small" id="clearSigBtn">Clear signature</button>
+</div>
+
+<div class="job-engineer-box">
+  <span>Engineer</span>
+  <strong id="jobEngineer"></strong>
+</div>
+
+<div class="actions save-actions">
+  <button type="submit">Save Job</button>
+  <button type="button" class="secondary" id="jobSheetBtn">Job Sheet</button>
+</div>
+
+<button type="button" class="complete-button" id="completeBtn">
+  Complete & Send Job Sheet
+</button>
+
+<div id="jobMessage"></div>
+</form>
+</dialog>
+
+<dialog id="accountDialog">
+  <div class="account-panel">
+    <img src="axis-logo.png" class="account-logo" alt="">
+    <h2 id="accountName">Engineer</h2>
+    <div class="muted" id="accountEmail"></div>
+    <div class="role-badge" id="accountRole"></div>
+    <div class="actions">
+      <button type="button" class="secondary" id="accountCloseBtn">Back</button>
+      <button type="button" class="danger" id="logoutBtn">Sign out</button>
+    </div>
+  </div>
+</dialog>
+
+<div id="printArea"></div>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
